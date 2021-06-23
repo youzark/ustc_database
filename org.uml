@@ -1,0 +1,6 @@
+@startuml
+class User{
+	userid int
+	
+}
+@enduml
