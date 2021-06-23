@@ -1,6 +1,18 @@
 @startuml
 class User{
-	userid int
-	
+	user_id int
+	username string
+}
+class Vids_path{
+	vid_id int
+	f_user_id int
+	vid_path string
+	vid_size int
+}
+class comments{
+	comment_id int
+	f_user_id int
+	f_vid_id int
+	comment_content string
 }
 @enduml
