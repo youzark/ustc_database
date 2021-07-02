@@ -76,10 +76,28 @@ def video_user_query(username):
     return result
 
 def video_comments_query(video_id):
-    con = sqlite3.connect(DATABASE
+    con = sqlite3.connect(DATABASE)
     cur = con.cursor()
     sql = 'select user_name, comment, time, comment_id from Comment where video_id = ?'
     cur.execute(sql,[video_id])
+    result = cur.fetchall()
+    con.close()
+    return result
+
+def video_query():
+    con = sqlite3.connect(DATABASE)
+    cur = con.cursor()
+    sql = 'select name, path, time, id from video'
+    cur.execute(sql)
+    result = cur.fetchall()
+    con.close()
+    return result
+
+def video_name_query(input_video_name):
+    con = sqlite3.connect(DATABASE)
+    cur = con.cursor()
+    sql = "select name, path, time, id from video where name like ?"
+    cur.execute(sql,['%' + input_video_name+ '%'])
     result = cur.fetchall()
     con.close()
     return result
@@ -204,20 +222,3 @@ def comment_delete(id):#删除评论
     con.commit()
     con.close()
 
-def video_query():
-    con = sqlite3.connect(DATABASE)
-    cur = con.cursor()
-    sql = 'select name, path, time, id from video'
-    cur.execute(sql)
-    result = cur.fetchall()
-    con.close()
-    return result
-
-def video_name_query(input_video_name):
-    con = sqlite3.connect(DATABASE)
-    cur = con.cursor()
-    sql = "select name, path, time, id from video where name like ?"
-    cur.execute(sql,['%' + input_video_name+ '%'])
-    result = cur.fetchall()
-    con.close()
-    return result
