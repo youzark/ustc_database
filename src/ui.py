@@ -110,6 +110,7 @@ layout = [
 
 window = sg.Window("short video platform", layout)
 
+
 user_name_inst = None
 current_open_video_id = None
 
