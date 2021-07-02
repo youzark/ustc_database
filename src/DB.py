@@ -1,6 +1,6 @@
 import sqlite3
 
-DATABASE = 'database/test.db'
+DATABASE = '../database/video_platform.db'
 
 #sql = "create table accounts (id integer primary key autoincrement,user_name string not null,password string not null);"
 #sql = "create table video (id integer primary key autoincrement,name string ,path string not null ,user_name string not null,time string not null);"
@@ -76,7 +76,7 @@ def video_user_query(username):
     return result
 
 def video_comments_query(video_id):
-    con = sqlite3.connect(DATABASE)
+    con = sqlite3.connect(DATABASE
     cur = con.cursor()
     sql = 'select user_name, comment, time, comment_id from Comment where video_id = ?'
     cur.execute(sql,[video_id])
