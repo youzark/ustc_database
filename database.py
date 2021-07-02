@@ -81,9 +81,6 @@ def service_list():
         Button(text="log out", command=log_out).pack()
         window.mainloop()
         window.destroy()
-    
-
-service_list()
 
 def user_interface():
     user_name = turtle.textinput("login","username")
