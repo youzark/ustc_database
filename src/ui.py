@@ -264,12 +264,22 @@ while True:
                     window["-new_friend_info-"].update("add friend successfully")
                     db.email_delete(message[3])
                     accept_suss = True
+            if accept_suss:
+                window["-new_friend_info-"].update("wrong user name")
         else:
             window["-new_friend_info-"].update("please login first")
 
-        
-
-
-
+    if event == "delete video":
+        if not user_name_inst == None:
+            delete_video_name = values["delete_video_name"]
+            delete_video_id = db.video_name_query(delete_video_name)[3]
+            delete_video_user = db.video_id_query(delete_video_id)[2]
+            if delete_video_user == user_name_inst:
+                db.video_delete(delete_video_id)
+                window["-delete_video_info-"].update("video delete successfully")
+            else:
+                window["-delete_video_info-"].update("you are not the owner")
+        else:
+            window["-delete_video_info-"].update("please login first")
 
 window.close()
