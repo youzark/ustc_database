@@ -34,6 +34,9 @@ login_column = [
         sg.Button("open")
     ],
     [
+        sg.Text(size=(40, 1), key="-video_open_info-")
+    ],
+    [
         sg.Text("your video list")
     ],
     [
@@ -58,7 +61,7 @@ video_viewer_column = [
         sg.In(size=(25, 1), enable_events=True, key="-upload_video_path-"),
     ],
     [
-        sg.Text(size=(40, 1), key="-vider_submit_info-")
+        sg.Text(size=(40, 1), key="-video_submit_info-")
     ],
     [
         sg.Button("submit")
@@ -209,24 +212,27 @@ while True:
             filename = values["-upload_video_path-"]
             time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             db.video_insert(name, filename, user_name_inst, time)
-            window["-vider_submit_info-"].update("submit successfully")
+            window["-video_submit_info-"].update("submit successfully")
         else:
-            window["-vider_submit_info-"].update("please login first")
+            window["-video_submit_info-"].update("please login first")
 
     if event == "open":
         if not user_name_inst == None:
             name = values["-open_video_name-"]
-            video_list = db.video_name_query(name)
-            window["-video_path-"].update(video_list[0][1])
-            current_open_video_id = video_list[0][3]
-            comment_list = db.video_comments_query(current_open_video_id)
-            show_comment_list = []
-            for comment_item in comment_list:
-                show_comment = f'{comment_item[1]} by:{comment_item[0]} time:{comment_item[2]}'
-                show_comment_list.append(show_comment)
-            window["-comment_list-"].update(show_comment_list)
+            try:
+                video_list = db.video_name_query(name)
+                window["-video_path-"].update(video_list[0][1])
+                current_open_video_id = video_list[0][3]
+                comment_list = db.video_comments_query(current_open_video_id)
+                show_comment_list = []
+                for comment_item in comment_list:
+                    show_comment = f'{comment_item[1]} by:{comment_item[0]} time:{comment_item[2]}'
+                    show_comment_list.append(show_comment)
+                window["-comment_list-"].update(show_comment_list)
+            except:
+                window["-video_open_info-"].update("video not exist")
         else:
-            window["-vider_submit_info-"].update("please login first")
+            window["-video_open_info-"].update("please login first")
 
     if event == "comment":
         if not user_name_inst == None:
@@ -271,11 +277,15 @@ while True:
 
     if event == "delete video":
         if not user_name_inst == None:
-            delete_video_name = values["delete_video_name"]
-            delete_video_id = db.video_name_query(delete_video_name)[3]
+            delete_video_name = values["-delete_video_name-"]
+            delete_video_id = db.video_name_query(delete_video_name)[0][3]
             delete_video_user = db.video_id_query(delete_video_id)[2]
             if delete_video_user == user_name_inst:
                 db.video_delete(delete_video_id)
+                # delete comment also
+                comment_list = db.video_comments_query(delete_video_id)
+                for comment in comment_list:
+                    db.comment_delete(comment[3])
                 window["-delete_video_info-"].update("video delete successfully")
             else:
                 window["-delete_video_info-"].update("you are not the owner")
