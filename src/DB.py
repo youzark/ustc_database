@@ -2,9 +2,6 @@ import sqlite3
 
 DATABASE = '../database/video_platform.db'
 
-#sql = "create table accounts (id integer primary key autoincrement,user_name string not null,password string not null);"
-#sql = "create table video (id integer primary key autoincrement,name string ,path string not null ,user_name string not null,time string not null);"
-#sql = 'create table Comment (comment_id integer primary key autoincrement,comment string not null,video_id integer ,user_name string not null,time string not null);'
 def ac_insert(user_name,password):
     con = sqlite3.connect(DATABASE)
     cur = con.cursor()
@@ -140,7 +137,7 @@ def friends_list_query(user_name):#依据用户名查询好友
 def message_query(user_name):#依据用户名查询收到的所有消息
     con = sqlite3.connect(DATABASE)
     cur = con.cursor()
-    sql = 'select send_user,message,time from emails where receive_user = ?'
+    sql = 'select send_user,message,time,email_id from emails where receive_user = ?'
     cur.execute(sql,[user_name])
     result = cur.fetchall()
     con.close()
@@ -166,6 +163,14 @@ def friendship_insert(owner_name,servant):#加为好友
     con.commit()
     con.close()
 
+def email_delete(email_id):
+    con = sqlite3.connect(DATABASE)
+    cur = con.cursor()
+    sql = 'delete from emails where email_id = ?'
+    cur.execute(sql,[email_id])
+    con.commit()
+    con.close()
+
 def friendship_delete(owner_name,servant):#删除好友
     con = sqlite3.connect(DATABASE)
     cur = con.cursor()
@@ -174,7 +179,7 @@ def friendship_delete(owner_name,servant):#删除好友
     con.commit()
     con.close()
 
-def send_eamil(send_user,receive_user,message,time):#发送消息
+def send_email(send_user,receive_user,message,time):#发送消息
     con = sqlite3.connect(DATABASE)
     cur = con.cursor()
     sql = 'insert into emails (send_user,receive_user,message,time) values(?,?,?,?)'
